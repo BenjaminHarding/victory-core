@@ -106,9 +106,12 @@ const _prepareParams = (inputStyle, index) => {
 
 const _approximateTextWidthInternal = (text, style) => {
   const widths = _splitToLines(text).map((line, index) => {
-    const len = line.toString().length;
+    const str = line.toString();
+    const len = str.match(/\S/g).length;
     const { fontSize, characterConstant, letterSpacing } = _prepareParams(style, index);
-    return (len * fontSize / characterConstant) + letterSpacing * (Math.max(len - 1, 0));
+    const width = (len * fontSize / characterConstant) + letterSpacing * (Math.max(len - 1, 0));
+    const whitespaceWidth = (str.length - len) * fontSize / 2.5;
+    return width + whitespaceWidth;
   });
   return Math.max(...widths);
 };
